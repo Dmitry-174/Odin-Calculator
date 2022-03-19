@@ -1,0 +1,29 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.digits-container {
+    display: flex;
+    width: 300px;
+    flex-wrap: wrap;
+}
+
+.digit, 
+.point {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 2px;
+    border-style: solid;
+    margin-right: -2px;
+    margin-bottom: -2px;
+}
+
+.zero {
+    width: 198px;
+}

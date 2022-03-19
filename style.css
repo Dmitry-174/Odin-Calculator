@@ -5,19 +5,23 @@
 
 .digits-container {
     display: flex;
+    flex-direction: column;
     width: 300px;
-    flex-wrap: wrap;
+    height: 400px;
+}
+
+.digit-line {
+    display: flex;
+    flex-grow: 1;
 }
 
 .digit, 
 .point {
-    width: 100px;
-    height: 100px;
+    flex-grow: 1;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-sizing: border-box;
     border: 2px;
     border-style: solid;
     margin-right: -2px;
@@ -25,5 +29,7 @@
 }
 
 .zero {
-    width: 198px;
+    flex-grow: 2;
+    box-sizing: border-box;
+    padding-right: 1.67px;
 }

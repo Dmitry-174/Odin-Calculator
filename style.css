@@ -6,8 +6,7 @@
 
 .keyboard {
     display: flex;
-    width: 400px;
-    height: 500px;
+    height: 400px;
 }
 
 .left-buttons {
@@ -47,4 +46,35 @@
     display: flex;
     flex-direction: column;
     flex-grow: 3;
+}
+
+.display {
+    height: 80px;
+    background-color: rgb(240, 240, 240);
+    margin-bottom: 10px;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    padding: 16px;
+    margin: 0 auto;
+}
+
+.current-input {
+    font-size: 36px;
+}
+
+.previous-input {
+    font-size: 18px;
+}
+
+.display {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 16px;
+
 }

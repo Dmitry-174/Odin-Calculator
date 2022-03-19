@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .keyboard {
@@ -31,6 +32,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 2px solid;
+    margin: 0 -2px -2px 0;
+    font-size: 26px;
 }
 
 .equal,

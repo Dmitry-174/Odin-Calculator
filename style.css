@@ -34,6 +34,8 @@
     border: 2px solid;
     margin: 0 -2px -2px 0;
     font-size: 26px;
+    flex-shrink: 0;
+    flex-basis: 0;
 }
 
 .equal,
@@ -42,10 +44,13 @@
     flex-grow: 2;
 }
 
-.small {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 3;
+.clear,
+.zero {
+    padding-right: 2px;
+}
+
+.equal{
+    padding-top: 2px;
 }
 
 .display {
@@ -76,5 +81,13 @@
     justify-content: space-between;
     align-items: flex-end;
     padding: 16px;
+}
 
+.right-buttons .button {
+    margin-right: 0;
+}
+
+.last .button,
+.equal {
+    margin-bottom: 0;
 }

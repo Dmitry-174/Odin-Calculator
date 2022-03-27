@@ -39,7 +39,8 @@ const calculation = {
 const currentInput = document.querySelector('.current-input');
 const previousInput = document.querySelector('.previous-input');
 const keyboardEl = document.querySelector('.keyboard');
-const equalBtn = document.querySelector('.equal')
+const equalBtn = document.querySelector('.equal');
+const clearBtn = document.querySelector('.clear');
 
 let inputedValue = '';
 
@@ -86,37 +87,45 @@ function setOperator(e) {
 keyboardEl.addEventListener('click', setOperator);
 
 function evaluate(e) {
-    console.dir(e);
     calculation.result = operate(calculation.operator, calculation.firstNumber,
         calculation.secondNumber);
     calculation.evaluate = true;
     ShowPreviousInput();
     ShowCurrentInput();
+    inputedValue = '';
 }
 
 equalBtn.addEventListener('click', evaluate);
 
-
-
-function ShowResult() {
-    keyboardEl.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('equal')) return;
-        second = Number(inputedValue)
-        const result = operate(operator, first, second)
-        previousInput.textContent = `${first} ${operator} ${second} =`;
+function clear(e) {
+    if (e.target == clearBtn) {
+        calculation.operator = '';
+        calculation.firstNumber = 0;
+        calculation.secondNumber = 0;
+        calculation.result = 0;
+        calculation.evaluate = false;
+        ShowPreviousInput();
+        ShowCurrentInput();
         inputedValue = '';
-        currentInput.textContent = result;
-        MakeNewCalulation();
-    })
+    } else if (e.target.classList.contains('digit') && calculation.evaluate) {
+        inputedValue = e.target.textContent;
+        calculation.operator = '';
+        calculation.firstNumber = Number.parseFloat(inputedValue);
+        calculation.secondNumber = 0;
+        calculation.result = 0;
+        calculation.evaluate = false;
+        ShowPreviousInput();
+        ShowCurrentInput();
+    } else if (e.target.classList.contains('operator') && calculation.evaluate) {
+        calculation.operator = e.target.textContent;
+        calculation.firstNumber = calculation.result;
+        calculation.secondNumber = 0;
+        calculation.result = 0;
+        calculation.evaluate = false;
+        ShowPreviousInput();
+        ShowCurrentInput();
+        inputedValue = '';
+    }
 }
 
-function MakeNewCalulation() {
-    keyboardEl.addEventListener('click', (e) => {
-        if (e.target.classList.contains('digit')) {
-            currentInput.textContent = '';
-            previousInput.textContent = ''
-        };
-    });
-}
-
-// makeCalculations();
+keyboardEl.addEventListener('click', clear);

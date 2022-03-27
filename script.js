@@ -42,6 +42,7 @@ const previousInput = document.querySelector('.previous-input');
 const keyboardEl = document.querySelector('.keyboard');
 const equalBtn = document.querySelector('.equal');
 const clearBtn = document.querySelector('.clear');
+const maxLength = 14;
 
 let inputedValue = '';
 
@@ -67,6 +68,7 @@ function ShowPreviousInput() {
 
 function addInputedValue(e) {
     if (!e.target.classList.contains('digit')) return;
+    if (checkMaxNumLegth(inputedValue)) return;
     inputedValue += e.target.textContent;
     if (calculation.operator === '') {
         calculation.firstNumber = Number.parseFloat(inputedValue);
@@ -98,6 +100,9 @@ keyboardEl.addEventListener('click', setOperator);
 function evaluate(e) {
     calculation.result = operate(calculation.operator, calculation.firstNumber,
         calculation.secondNumber);
+    if (checkMaxNumLegth(calculation.result)) {
+        toFitResult();
+    }
     calculation.evaluate = true;
     ShowPreviousInput();
     ShowCurrentInput();
@@ -147,3 +152,27 @@ function clear(e) {
 }
 
 keyboardEl.addEventListener('click', clear);
+
+function checkMaxNumLegth(num) {
+    num = num.toString();
+    if (num.length < maxLength) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function toFitResult() {
+    if (calculation.result.isInt) {
+        calculation.result = calculation.result.toExponential(2);
+    } else {
+        intPart = Math.trunc(calculation.result);
+        if (checkMaxNumLegth(intPart)) {
+            calculation.result = calculation.result.toExponential(2);
+        } else {
+            calculation.result = calculation.result
+            .toFixed(maxLength - 1 - intPart.toString().length);
+        }
+    }
+
+}

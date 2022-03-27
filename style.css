@@ -91,3 +91,8 @@
 .equal {
     margin-bottom: 0;
 }
+
+.copyright {
+    text-align: center;
+    font-size: 10px;
+}

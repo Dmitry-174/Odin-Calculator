@@ -11,7 +11,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    if (b === 0) return 'Divide by 0 is prohibited'
+    if (b === 0) return zeroDivisionMessage;
     return a / b;
 }
 
@@ -37,6 +37,7 @@ const calculation = {
     continue: false,
 }
 
+const zeroDivisionMessage = 'Divide by 0 error'
 const currentInput = document.querySelector('.current-input');
 const previousInput = document.querySelector('.previous-input');
 const keyboardEl = document.querySelector('.keyboard');
@@ -163,6 +164,7 @@ function checkMaxNumLegth(num) {
 }
 
 function toFitResult() {
+    if (calculation.result == zeroDivisionMessage) return;
     if (calculation.result.isInt) {
         calculation.result = calculation.result.toExponential(2);
     } else {

@@ -28,23 +28,75 @@ function operate(operator, a, b) {
     }
 }
 
-function showInputedValue() {
-    keyboardEl.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('digit')) return;
-        inputedValue += e.target.textContent;
-        currentInput.textContent = inputedValue;
-    })
-} 
-
-function makeCalculations() {
-    keyboardEl.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('operator')) return;
-        operator = e.target.textContent;
-        first = Number(inputedValue);
-        previousInput.textContent = `${first} ${operator}`;
-        inputedValue = '';
-    })
+const calculation = {
+    operator: '',
+    firstNumber: 0,
+    secondNumber: 0,
+    result: 0,
+    evaluate: false,
 }
+
+const currentInput = document.querySelector('.current-input');
+const previousInput = document.querySelector('.previous-input');
+const keyboardEl = document.querySelector('.keyboard');
+const equalBtn = document.querySelector('.equal')
+
+let inputedValue = '';
+
+function ShowCurrentInput() {
+    if (calculation.evaluate) {
+        currentInput.textContent = calculation.result;
+    } else if (calculation.operator) {
+        currentInput.textContent = calculation.secondNumber;
+    } else {
+        currentInput.textContent = calculation.firstNumber;
+    }
+}
+
+function ShowPreviousInput() {
+    if (calculation.evaluate) {
+        previousInput.textContent = `${calculation.firstNumber} ${calculation.operator} ${calculation.secondNumber}`;
+    } else if (calculation.operator) {
+        previousInput.textContent = `${calculation.firstNumber} ${calculation.operator}`;
+    } else {
+        previousInput.textContent = '';
+    }
+}
+
+function addInputedValue(e) {
+    if (!e.target.classList.contains('digit')) return;
+    inputedValue += e.target.textContent;
+    if (calculation.operator === '') {
+        calculation.firstNumber = Number.parseFloat(inputedValue);
+    } else {
+        calculation.secondNumber = Number.parseFloat(inputedValue);
+    }
+    ShowCurrentInput();
+}
+
+keyboardEl.addEventListener('click', addInputedValue);
+
+function setOperator(e) {
+    if (!e.target.classList.contains('operator')) return;
+    calculation.operator = e.target.textContent;
+    ShowPreviousInput();
+    inputedValue = '';
+}
+
+keyboardEl.addEventListener('click', setOperator);
+
+function evaluate(e) {
+    console.dir(e);
+    calculation.result = operate(calculation.operator, calculation.firstNumber,
+        calculation.secondNumber);
+    calculation.evaluate = true;
+    ShowPreviousInput();
+    ShowCurrentInput();
+}
+
+equalBtn.addEventListener('click', evaluate);
+
+
 
 function ShowResult() {
     keyboardEl.addEventListener('click', (e) => {
@@ -54,17 +106,17 @@ function ShowResult() {
         previousInput.textContent = `${first} ${operator} ${second} =`;
         inputedValue = '';
         currentInput.textContent = result;
+        MakeNewCalulation();
     })
 }
 
-let operator = '';
-let first = 0;
-let second = 0;
-let inputedValue = '';
-const keyboardEl = document.querySelector('.keyboard');
-const currentInput = document.querySelector('.current-input');
-const previousInput = document.querySelector('.previous-input');
+function MakeNewCalulation() {
+    keyboardEl.addEventListener('click', (e) => {
+        if (e.target.classList.contains('digit')) {
+            currentInput.textContent = '';
+            previousInput.textContent = ''
+        };
+    });
+}
 
-showInputedValue();
-makeCalculations();
-ShowResult();
+// makeCalculations();

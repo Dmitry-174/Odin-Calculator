@@ -34,6 +34,7 @@ const calculation = {
     secondNumber: 0,
     result: 0,
     evaluate: false,
+    continue: false,
 }
 
 const currentInput = document.querySelector('.current-input');
@@ -79,8 +80,16 @@ keyboardEl.addEventListener('click', addInputedValue);
 
 function setOperator(e) {
     if (!e.target.classList.contains('operator')) return;
+    if (calculation.evaluate) return;
+    if (calculation.operator) {
+        calculation.continue = true;
+        evaluate();
+        calculation.operator = e.target.textContent;
+        return
+    }
     calculation.operator = e.target.textContent;
     ShowPreviousInput();
+    ShowCurrentInput();
     inputedValue = '';
 }
 
@@ -107,7 +116,7 @@ function clear(e) {
         ShowPreviousInput();
         ShowCurrentInput();
         inputedValue = '';
-    } else if (e.target.classList.contains('digit') && calculation.evaluate) {
+    } else if (e.target.classList.contains('digit') && calculation.evaluate && !calculation.continue) {
         inputedValue = e.target.textContent;
         calculation.operator = '';
         calculation.firstNumber = Number.parseFloat(inputedValue);
@@ -116,7 +125,7 @@ function clear(e) {
         calculation.evaluate = false;
         ShowPreviousInput();
         ShowCurrentInput();
-    } else if (e.target.classList.contains('operator') && calculation.evaluate) {
+    } else if (e.target.classList.contains('operator') && calculation.evaluate && !calculation.continue) {
         calculation.operator = e.target.textContent;
         calculation.firstNumber = calculation.result;
         calculation.secondNumber = 0;
@@ -125,6 +134,15 @@ function clear(e) {
         ShowPreviousInput();
         ShowCurrentInput();
         inputedValue = '';
+    } else if (e.target.classList.contains('digit') && calculation.evaluate && calculation.continue) {
+        inputedValue = e.target.textContent;
+        calculation.firstNumber = calculation.result;
+        calculation.secondNumber = Number.parseFloat(inputedValue);
+        calculation.result = 0;
+        calculation.evaluate = false;
+        calculation.continue = false;
+        ShowPreviousInput();
+        ShowCurrentInput();
     }
 }
 

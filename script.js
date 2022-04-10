@@ -74,6 +74,7 @@ function ShowPreviousInput() {
 function addInputedValue(e) {
     if (!e.target.classList.contains('digit')) return;
     if (checkMaxNumLegth(inputedValue)) return;
+    if (checkIntZero() && e.target.textContent == 0) return;
     inputedValue += e.target.textContent;
     if (calculation.operator === '') {
         calculation.firstNumber = inputedValue;
@@ -227,6 +228,7 @@ pointBtn.addEventListener('click', addPoint);
 
 function keyboardHandle(e) {
     if (e.key >= 0 && e.key <= 9 && !calculation.evaluate) {
+        if (checkIntZero() && e.key == 0) return;
         if (checkMaxNumLegth(inputedValue)) return;
         inputedValue += e.key;
         if (calculation.operator === '') {
@@ -249,3 +251,7 @@ function keyboardHandle(e) {
 }
 
 document.addEventListener('keypress', keyboardHandle)
+
+function checkIntZero() {
+    return inputedValue == 0 && !inputedValue.includes('.');
+}

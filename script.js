@@ -208,3 +208,5 @@ function addPoint() {
 }
 
 pointBtn.addEventListener('click', addPoint);
+
+document.addEventListener('keypress', (e) => console.dir(e))

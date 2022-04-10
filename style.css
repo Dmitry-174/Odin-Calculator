@@ -49,6 +49,10 @@
     padding-right: 2px;
 }
 
+.equal {
+    background-color: #4285f4;
+}
+
 .equal{
     padding-top: 2px;
 }
@@ -95,4 +99,24 @@
 .copyright {
     text-align: center;
     font-size: 10px;
+}
+
+.operator {
+    background-color: rgb(229, 229, 229);
+}
+
+.button:hover {
+    background-color: rgb(205, 205, 205);
+}
+
+.equal:hover {
+    background-color: #3874d4;
+}
+
+.button:active {
+    background-color: rgb(185, 185, 185);
+}
+
+.equal:active {
+    background-color: #346bc2;
 }

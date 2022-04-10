@@ -241,7 +241,7 @@ function keyboardHandle(e) {
         clear(e);
     } else if (e.key === '=' || e.key === "Enter") {
         evaluate();
-    } else if (e.key === '.') {
+    } else if (e.key === '.' || e.key === ',') {
         addPoint();
     } else if (operators.includes(e.key)) {
         setOperator(e);

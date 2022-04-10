@@ -35,6 +35,7 @@ const calculation = {
     result: 0,
     evaluate: false,
     continue: false,
+    point: false,
 }
 
 const zeroDivisionMessage = 'Divide by 0 error'
@@ -44,6 +45,7 @@ const keyboardEl = document.querySelector('.keyboard');
 const equalBtn = document.querySelector('.equal');
 const clearBtn = document.querySelector('.clear');
 const maxLength = 14;
+const pointBtn = document.querySelector('.point')
 
 let inputedValue = '';
 
@@ -61,6 +63,7 @@ function ShowPreviousInput() {
     if (calculation.evaluate) {
         previousInput.textContent = `${calculation.firstNumber} ${calculation.operator} ${calculation.secondNumber}`;
     } else if (calculation.operator) {
+        calculation.firstNumber = Number.parseFloat(calculation.firstNumber);
         previousInput.textContent = `${calculation.firstNumber} ${calculation.operator}`;
     } else {
         previousInput.textContent = '';
@@ -72,9 +75,9 @@ function addInputedValue(e) {
     if (checkMaxNumLegth(inputedValue)) return;
     inputedValue += e.target.textContent;
     if (calculation.operator === '') {
-        calculation.firstNumber = Number.parseFloat(inputedValue);
+        calculation.firstNumber = inputedValue;
     } else {
-        calculation.secondNumber = Number.parseFloat(inputedValue);
+        calculation.secondNumber = inputedValue;
     }
     ShowCurrentInput();
 }
@@ -94,12 +97,16 @@ function setOperator(e) {
     ShowPreviousInput();
     ShowCurrentInput();
     inputedValue = '';
+    calculation.point = false;
 }
 
 keyboardEl.addEventListener('click', setOperator);
 
 function evaluate(e) {
-    calculation.result = operate(calculation.operator, calculation.firstNumber,
+    if (!calculation.operator) return;
+    calculation.secondNumber = Number.parseFloat(calculation.secondNumber);
+    calculation.result = operate(calculation.operator, 
+        calculation.firstNumber,
         calculation.secondNumber);
     if (checkMaxNumLegth(calculation.result)) {
         toFitResult();
@@ -108,6 +115,7 @@ function evaluate(e) {
     ShowPreviousInput();
     ShowCurrentInput();
     inputedValue = '';
+    calculation.point = false;
 }
 
 equalBtn.addEventListener('click', evaluate);
@@ -119,6 +127,7 @@ function clear(e) {
         calculation.secondNumber = 0;
         calculation.result = 0;
         calculation.evaluate = false;
+        calculation.point = false;
         ShowPreviousInput();
         ShowCurrentInput();
         inputedValue = '';
@@ -129,6 +138,7 @@ function clear(e) {
         calculation.secondNumber = 0;
         calculation.result = 0;
         calculation.evaluate = false;
+        calculation.point = false;
         ShowPreviousInput();
         ShowCurrentInput();
     } else if (e.target.classList.contains('operator') && calculation.evaluate && !calculation.continue) {
@@ -137,6 +147,7 @@ function clear(e) {
         calculation.secondNumber = 0;
         calculation.result = 0;
         calculation.evaluate = false;
+        calculation.point = false;
         ShowPreviousInput();
         ShowCurrentInput();
         inputedValue = '';
@@ -147,6 +158,7 @@ function clear(e) {
         calculation.result = 0;
         calculation.evaluate = false;
         calculation.continue = false;
+        calculation.point = false;
         ShowPreviousInput();
         ShowCurrentInput();
     }
@@ -178,3 +190,21 @@ function toFitResult() {
     }
 
 }
+
+function addPoint() {
+    if (calculation.point) return;
+    if (!inputedValue) {
+        inputedValue = '0.';
+    } else {
+        inputedValue += '.';
+    }
+    calculation.point = true;
+    if (calculation.operator === '') {
+        calculation.firstNumber = inputedValue;
+    } else {
+        calculation.secondNumber = inputedValue;
+    }
+    ShowCurrentInput();
+}
+
+pointBtn.addEventListener('click', addPoint);

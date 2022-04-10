@@ -120,3 +120,22 @@
 .equal:active {
     background-color: #346bc2;
 }
+
+@media (max-width: 500px) {
+    .button:hover {
+        background-color: rgb(255, 255, 255);
+    }
+    
+    .equal:hover {
+        background-color: #4285f4;
+    }
+
+    .button:active {
+        background-color: rgb(185, 185, 185);
+    }
+    
+    .equal:active {
+        background-color: #346bc2;
+    }
+
+}

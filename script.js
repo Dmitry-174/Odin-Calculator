@@ -45,7 +45,8 @@ const keyboardEl = document.querySelector('.keyboard');
 const equalBtn = document.querySelector('.equal');
 const clearBtn = document.querySelector('.clear');
 const maxLength = 14;
-const pointBtn = document.querySelector('.point')
+const pointBtn = document.querySelector('.point');
+const operators = ['/', '*', '-', '+'];
 
 let inputedValue = '';
 
@@ -85,15 +86,21 @@ function addInputedValue(e) {
 keyboardEl.addEventListener('click', addInputedValue);
 
 function setOperator(e) {
-    if (!e.target.classList.contains('operator')) return;
+    if (!e.target.classList.contains('operator') &&
+        e.type === 'click') {
+        return;
+    }
     if (calculation.evaluate) return;
     if (calculation.operator) {
         calculation.continue = true;
         evaluate();
-        calculation.operator = e.target.textContent;
+        calculation.operator = e.type === 'click' ? e.target.textContent :
+            e.key;
         return
     }
-    calculation.operator = e.target.textContent;
+
+    calculation.operator = e.type === 'click' ? e.target.textContent :
+        e.key;
     ShowPreviousInput();
     ShowCurrentInput();
     inputedValue = '';
@@ -105,7 +112,7 @@ keyboardEl.addEventListener('click', setOperator);
 function evaluate(e) {
     if (!calculation.operator) return;
     calculation.secondNumber = Number.parseFloat(calculation.secondNumber);
-    calculation.result = operate(calculation.operator, 
+    calculation.result = operate(calculation.operator,
         calculation.firstNumber,
         calculation.secondNumber);
     if (checkMaxNumLegth(calculation.result)) {
@@ -131,8 +138,11 @@ function clear(e) {
         ShowPreviousInput();
         ShowCurrentInput();
         inputedValue = '';
-    } else if (e.target.classList.contains('digit') && calculation.evaluate && !calculation.continue) {
-        inputedValue = e.target.textContent;
+    } else if ((e.type === 'click' && e.target.classList.contains('digit') ||
+        e.type === 'keypress' && e.key >= 0 && e.key <= 9)
+        && calculation.evaluate && !calculation.continue) {
+        inputedValue = e.type === 'click' ? e.target.textContent :
+            e.key;
         calculation.operator = '';
         calculation.firstNumber = Number.parseFloat(inputedValue);
         calculation.secondNumber = 0;
@@ -141,8 +151,11 @@ function clear(e) {
         calculation.point = false;
         ShowPreviousInput();
         ShowCurrentInput();
-    } else if (e.target.classList.contains('operator') && calculation.evaluate && !calculation.continue) {
-        calculation.operator = e.target.textContent;
+    } else if ((e.type === 'click' && e.target.classList.contains('operator') ||
+        e.type === 'keypress' && operators.includes(e.key)) &&
+        calculation.evaluate && !calculation.continue) {
+        calculation.operator = e.type === 'click' ? e.target.textContent :
+            e.key;
         calculation.firstNumber = calculation.result;
         calculation.secondNumber = 0;
         calculation.result = 0;
@@ -151,8 +164,11 @@ function clear(e) {
         ShowPreviousInput();
         ShowCurrentInput();
         inputedValue = '';
-    } else if (e.target.classList.contains('digit') && calculation.evaluate && calculation.continue) {
-        inputedValue = e.target.textContent;
+    } else if ((e.type === 'click' && e.target.classList.contains('digit') ||
+        e.type === 'keypress' && e.key >= 0 && e.key <= 9) &&
+        calculation.evaluate && calculation.continue) {
+        inputedValue = e.type === 'click' ? e.target.textContent :
+            e.key;
         calculation.firstNumber = calculation.result;
         calculation.secondNumber = Number.parseFloat(inputedValue);
         calculation.result = 0;
@@ -185,7 +201,7 @@ function toFitResult() {
             calculation.result = calculation.result.toExponential(2);
         } else {
             calculation.result = calculation.result
-            .toFixed(maxLength - 1 - intPart.toString().length);
+                .toFixed(maxLength - 1 - intPart.toString().length);
         }
     }
 
@@ -209,4 +225,27 @@ function addPoint() {
 
 pointBtn.addEventListener('click', addPoint);
 
-document.addEventListener('keypress', (e) => console.dir(e))
+function keyboardHandle(e) {
+    if (e.key >= 0 && e.key <= 9 && !calculation.evaluate) {
+        if (checkMaxNumLegth(inputedValue)) return;
+        inputedValue += e.key;
+        if (calculation.operator === '') {
+            calculation.firstNumber = inputedValue;
+        } else {
+            calculation.secondNumber = inputedValue;
+        }
+        ShowCurrentInput();
+    } else if (e.key >= 0 && e.key <= 9 && calculation.evaluate) {
+        clear(e);
+    } else if (e.key === '=' || e.key === "Enter") {
+        evaluate();
+    } else if (e.key === '.') {
+        addPoint();
+    } else if (operators.includes(e.key)) {
+        setOperator(e);
+        clear(e);
+    }
+
+}
+
+document.addEventListener('keypress', keyboardHandle)

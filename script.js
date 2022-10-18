@@ -129,7 +129,7 @@ function evaluate(e) {
 equalBtn.addEventListener('click', evaluate);
 
 function clear(e) {
-    if (e.target == clearBtn) {
+    if (e.target == clearBtn || e.key === 'Delete') {
         calculation.operator = '';
         calculation.firstNumber = 0;
         calculation.secondNumber = 0;
@@ -241,10 +241,12 @@ function keyboardHandle(e) {
         clear(e);
     } else if (e.key === '=' || e.key === "Enter") {
         evaluate();
-    } else if (e.key === '.') {
+    } else if (e.key === '.' || e.key === ',') {
         addPoint();
     } else if (operators.includes(e.key)) {
         setOperator(e);
+        clear(e);
+    } else if (e.key === 'Delete') {
         clear(e);
     }
 
